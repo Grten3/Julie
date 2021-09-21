@@ -14,7 +14,7 @@ def quit(): #quit command
 
 #print details of all the camps
 def print_purchase_details ():
-    global j_names, total_entries, name_count
+    global total_entries, name_count
     name_count = 0
     Label(main_window, font='bold',text="Row").grid(column=0,row=7)
     Label(main_window, font='bold',text="Full Name").grid(column=1,row=7)
@@ -48,7 +48,7 @@ def append_details ():
 def delete_row ():
     global purchase_details, delete_item, total_entries, name_count
     del purchase_details[int(delete_item.get())]
-    total_entries = total_entries - 1
+    total_entries =- 1
     delete_item.delete(0,'end')
     Label(main_window, text="       ").grid(column=0,row=name_count+7) 
     Label(main_window, text="       ").grid(column=1,row=name_count+7)
@@ -96,7 +96,7 @@ def GUI(): #Main GUI of the program
 #start the program running
 def main():
     global main_window
-    global purchase_details, total_entries
+    global purchase_details, full_name, receipt_no, item_hired, quantity, total_entries
     purchase_details = []
     total_entries = 0
     main_window =Tk()
