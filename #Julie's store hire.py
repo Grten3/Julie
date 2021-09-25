@@ -38,42 +38,72 @@ def print_purchase_details ():
 
 
 
-
 #add the next camper to the list if all parameters are meet
 def append_details ():
-    global purchase_details, full_name, receipt_no, item_hired, quantity, total_entries, full_name_first, full_name_blank
-  
+    global purchase_details, full_name, receipt_no, item_hired, quantity, total_entries, full_name_first, full_name_blank, receipt_no_string, receipt_no_blank
 
-  
-    while len(re.findall(r'\w+', full_name.get())) == 0:
-        full_name_blank = Label(main_window, text="    *This can't be blank. Enter the customer's Full Name     ", fg="red")
+
+
+#Check if the full name entry is blank 
+    if len(re.findall(r'\w+', full_name.get())) == 0:
+        full_name_first.destroy()
+        full_name_blank.destroy()
+        full_name_blank = Label(main_window, text="*This can't be blank. Enter the customer's Full Name", fg="red")
         full_name_blank.grid(row=1, column=3, columnspan=3)
-        print("loop")
-        full_name_blank.after(6000,lambda:full_name_blank.destroy())
-        break
-             
-    while 0 < len(re.findall(r'\w+', full_name.get())) < 2:
+        
+      
+     
+
+#Check if only first name is entered in the full name entry           
+    if 0 < len(re.findall(r'\w+', full_name.get())) < 2:
+        full_name_first.destroy()
+        full_name_blank.destroy()
         full_name_first = Label(main_window, text="*Only First name is entered. Enter the customer's Full Name", fg="red")
         full_name_first.grid(row=1, column=3, columnspan=3)
-        print("loop1")
-        full_name_first.after(6000,lambda:full_name_first.destroy())
-        break
+        full_name_blank.destroy()
+        
+    if len(re.findall(r'\w+', full_name.get())) > 1:
+        print(full_name_blank.destroy())
+        print(full_name_first.destroy())
+     
+
+#check if receipt number entry is blank
+    if len(re.findall(r'\w+', receipt_no.get())) == 0:
+        receipt_no_string.destroy()
+        receipt_no_blank.destroy()
+        receipt_no_blank = Label(main_window, text="*This can't be blank. Enter the Receipt Number", fg="red")
+        receipt_no_blank.grid(row=2, column=3, columnspan=3)
+        print (len(re.findall(r'\w+', receipt_no.get())))
+        
+     
+
+#Check if there's a letter in the receipt number entry 
+    if len(re.findall(r'\w+', receipt_no.get())) != 0:  
+        receipt_no_blank.destroy()
+        receipt_no_string.destroy()
+        if receipt_no.get().isdecimal() == False:
+            receipt_no_string = Label(main_window, text="*A letter is entered. Enter the only the Receipt Number", fg="red")
+            receipt_no_string.grid(row=2, column=3, columnspan=3)
     
 
+    if (receipt_no.get().isdecimal()) == True:
+        print(receipt_no_blank.destroy())
+        print(receipt_no_string.destroy())
+     
+    
+#append details if all requirements are met 
     if len(re.findall(r'\w+', full_name.get())) > 1:
-         purchase_details.append([full_name.get().title(),receipt_no.get(),item_hired .get(),quantity.get()])
-         full_name.delete(0,'end')
-         receipt_no.delete(0,'end')
-         item_hired.delete(0,'end')
-         quantity.delete(0,'end')
-         total_entries +=  1
-         print("Loop3")
+        if receipt_no.get().isdecimal() == True:
+            purchase_details.append([full_name.get().title(),receipt_no.get(),item_hired .get(),quantity.get()])
+            full_name.delete(0,'end')
+            receipt_no.delete(0,'end')
+            item_hired.delete(0,'end')
+            quantity.delete(0,'end')
+            total_entries +=  1
+            
+      
         
-
-def clear():
-    full_name_blank.destroy()
-    full_name_first.destroy()
-
+        
 
 
 
@@ -83,11 +113,11 @@ def delete_row ():
     del purchase_details[int(delete_item.get())]
     total_entries -= 1
     delete_item.delete(0,'end')
-    Label(main_window, text="       ").grid(column=0,row=name_count+10)
-    Label(main_window, text="       ").grid(column=1,row=name_count+10)
-    Label(main_window, text="       ").grid(column=2,row=name_count+10)
-    Label(main_window, text="       ").grid(column=3,row=name_count+10)
-    Label(main_window, text="       ").grid(column=4,row=name_count+10)
+    Label(main_window, text="          ").grid(column=0,row=name_count+10)
+    Label(main_window, text="                      ").grid(column=1,row=name_count+10)
+    Label(main_window, text="          ").grid(column=2,row=name_count+10)
+    Label(main_window, text="          ").grid(column=3,row=name_count+10)
+    Label(main_window, text="          ").grid(column=4,row=name_count+10)
     print_purchase_details()
 
 
@@ -131,6 +161,12 @@ def GUI(): #Main GUI of the program
 
 
 
+def placeholder():
+    global full_name_first, full_name_blank, receipt_no_string, receipt_no_blank
+    full_name_blank = Label(main_window, text="")
+    full_name_first = Label(main_window, text="")
+    receipt_no_string = Label(main_window, text="")
+    receipt_no_blank = Label(main_window, text="")
 
 
 
@@ -138,11 +174,13 @@ def GUI(): #Main GUI of the program
 #start the program running
 def main():
     global main_window
-    global purchase_details, full_name, receipt_no, item_hired, quantity, total_entries, full_name_first, full_name_blank
+    global purchase_details, full_name, receipt_no, item_hired, quantity, total_entries
     purchase_details = []
     total_entries = 0
     main_window =Tk()
     GUI()  
+    placeholder()
+ 
     main_window.title("Tracking Program")
     
     main_window.mainloop()
