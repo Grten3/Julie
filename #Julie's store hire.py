@@ -38,74 +38,122 @@ def print_purchase_details ():
 
 
 
-#add the next camper to the list if all parameters are meet
+#add the next purchase details to the list if all parameters are meet
 def append_details ():
-    global purchase_details, full_name, receipt_no, item_hired, quantity, total_entries, full_name_first, full_name_blank, receipt_no_string, receipt_no_blank
+    global purchase_details, full_name, receipt_no, item_hired, quantity, total_entries, full_name_first, full_name_blank, receipt_no_string, receipt_no_blank, item_hired_blank, quantity_blank, quantity_limit, quantity_letter
 
 
 
 #Check if the full name entry is blank 
     if len(re.findall(r'\w+', full_name.get())) == 0:
-        full_name_first.destroy()
         full_name_blank.destroy()
+        full_name_first.destroy()
         full_name_blank = Label(main_window, text="*This can't be blank. Enter the customer's Full Name", fg="red")
         full_name_blank.grid(row=1, column=3, columnspan=3)
         
-      
-     
-
 #Check if only first name is entered in the full name entry           
     if 0 < len(re.findall(r'\w+', full_name.get())) < 2:
-        full_name_first.destroy()
         full_name_blank.destroy()
+        full_name_first.destroy()
         full_name_first = Label(main_window, text="*Only First name is entered. Enter the customer's Full Name", fg="red")
         full_name_first.grid(row=1, column=3, columnspan=3)
         full_name_blank.destroy()
         
     if len(re.findall(r'\w+', full_name.get())) > 1:
-        print(full_name_blank.destroy())
-        print(full_name_first.destroy())
+        full_name_blank.destroy()
+        full_name_first.destroy()
      
+
 
 #check if receipt number entry is blank
     if len(re.findall(r'\w+', receipt_no.get())) == 0:
-        receipt_no_string.destroy()
         receipt_no_blank.destroy()
+        receipt_no_string.destroy()
         receipt_no_blank = Label(main_window, text="*This can't be blank. Enter the Receipt Number", fg="red")
         receipt_no_blank.grid(row=2, column=3, columnspan=3)
-        print (len(re.findall(r'\w+', receipt_no.get())))
+    
         
-     
-
 #Check if there's a letter in the receipt number entry 
     if len(re.findall(r'\w+', receipt_no.get())) != 0:  
         receipt_no_blank.destroy()
         receipt_no_string.destroy()
         if receipt_no.get().isdecimal() == False:
-            receipt_no_string = Label(main_window, text="*A letter is entered. Enter the only the Receipt Number", fg="red")
+            receipt_no_string = Label(main_window, text="*A letter is entered. Enter the Receipt Number only", fg="red")
             receipt_no_string.grid(row=2, column=3, columnspan=3)
     
-
     if (receipt_no.get().isdecimal()) == True:
-        print(receipt_no_blank.destroy())
-        print(receipt_no_string.destroy())
+        receipt_no_blank.destroy()
+        receipt_no_string.destroy()
      
+
+#check if item hired entry is blank
+    if len(re.findall(r'\w+', item_hired.get())) == 0:
+        item_hired_blank.destroy()
+        item_hired_blank = Label(main_window, text="*This can't be blank. Enter the Hired Item", fg="red")
+        item_hired_blank.grid(row=3, column=3, columnspan=3)
+
+    if len(re.findall(r'\w+', item_hired.get())) > 0:
+        item_hired_blank.destroy()
+
+
+
+#check if quantity entry is blank
+    if len(re.findall(r'\w+', quantity.get())) == 0:
+        quantity_blank.destroy()
+        quantity_letter.destroy()
+        quantity_limit.destroy()
+        quantity_blank = Label(main_window, text="*This can't be blank. Enter the Quantity", fg="red")
+        quantity_blank.grid(row=4, column=3, columnspan=3)
+
+    if len(re.findall(r'\w+', quantity.get())) != 0:  
+        quantity_blank.destroy()
+        quantity_letter.destroy()
+        quantity_limit.destroy()
+        print("hi")
+
+        try:
+             inter = int(quantity.get())
+             if 501 < int(quantity.get()) or int(quantity.get()) < 0:
+                quantity_blank.destroy()
+                quantity_letter.destroy()
+                quantity_limit.destroy()
+                quantity_limit = Label(main_window, text="*Invalid value is entered. Enter a Quantity between 1 - 600", fg="red")
+                quantity_limit.grid(row=4, column=3, columnspan=3)
+
+                if 501 > int(quantity.get()) > 0:
+                    quantity_blank.destroy()
+                    quantity_letter.destroy()
+                    quantity_limit.destroy()
+             
+        except ValueError:
+            quantity_letter = Label(main_window, text="*A letter is entered. Enter the Quantity Number only", fg="red")
+            quantity_letter.grid(row=4, column=3, columnspan=3)
+            print("hi2")
     
+    
+    if quantity.get().isdecimal() == True:
+        inter = int(quantity.get())
+
+        
+
+       
+
 #append details if all requirements are met 
     if len(re.findall(r'\w+', full_name.get())) > 1:
         if receipt_no.get().isdecimal() == True:
-            purchase_details.append([full_name.get().title(),receipt_no.get(),item_hired .get(),quantity.get()])
-            full_name.delete(0,'end')
-            receipt_no.delete(0,'end')
-            item_hired.delete(0,'end')
-            quantity.delete(0,'end')
-            total_entries +=  1
+            if len(re.findall(r'\w+', item_hired.get())) > 0:
+                    if quantity.get().isdecimal() == True: #fix tommorow 
+                        if 501 > inter > 0:
+                            purchase_details.append([full_name.get().title(),receipt_no.get(),item_hired .get(),quantity.get()]) 
+                            full_name.delete(0,'end')
+                            receipt_no.delete(0,'end')
+                            item_hired.delete(0,'end')
+                            quantity.delete(0,'end')
+                            total_entries +=  1
             
       
         
         
-
-
 
 #delete a row from the list
 def delete_row ():
@@ -162,11 +210,15 @@ def GUI(): #Main GUI of the program
 
 
 def placeholder():
-    global full_name_first, full_name_blank, receipt_no_string, receipt_no_blank
+    global full_name_first, full_name_blank, receipt_no_string, receipt_no_blank, item_hired_blank, quantity_blank, quantity_letter, quantity_limit
     full_name_blank = Label(main_window, text="")
     full_name_first = Label(main_window, text="")
     receipt_no_string = Label(main_window, text="")
     receipt_no_blank = Label(main_window, text="")
+    item_hired_blank = Label(main_window, text="")
+    quantity_blank = Label(main_window, text="")
+    quantity_letter = Label(main_window, text="")
+    quantity_limit = Label(main_window, text="")
 
 
 
