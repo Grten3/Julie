@@ -7,8 +7,8 @@ import random
 import re
 
 
-
-def quit(): #quit command
+#quit command
+def quit(): 
     main_window.destroy()
 
 
